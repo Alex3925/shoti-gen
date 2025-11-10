@@ -1,54 +1,58 @@
-lucide.createIcons();
+document.addEventListener("DOMContentLoaded", () => {
+  const generateBtn = document.getElementById("generateBtn");
+  const video = document.getElementById("video");
+  const status = document.getElementById("status");
+  const themeToggle = document.getElementById("themeToggle");
 
-const themeToggle = document.getElementById('themeToggle');
-const html = document.documentElement;
-themeToggle.addEventListener('click', () => html.classList.toggle('light'));
+  // ----------------------------
+  // 🌙 Theme toggle
+  // ----------------------------
+  themeToggle.addEventListener("click", () => {
+    document.documentElement.classList.toggle("dark");
+    localStorage.setItem(
+      "theme",
+      document.documentElement.classList.contains("dark") ? "dark" : "light"
+    );
+  });
 
-const btn = document.getElementById('generateBtn');
-const spinner = document.getElementById('btnSpinner');
-const status = document.getElementById('status');
-const videoSection = document.getElementById('videoSection');
-const shotiVideo = document.getElementById('shotiVideo');
-const downloadBtn = document.getElementById('downloadBtn');
-const copyBtn = document.getElementById('copyBtn');
+  // Load saved theme
+  if (localStorage.getItem("theme") === "dark") {
+    document.documentElement.classList.add("dark");
+  }
 
-btn.addEventListener('click', async () => {
-  try {
-    btn.disabled = true;
-    spinner.classList.remove('hidden');
-    status.textContent = "Fetching a random Shoti...";
-    videoSection.classList.add('hidden');
-    videoSection.classList.remove('opacity-100');
+  // ----------------------------
+  // 🎥 Generate Shoti handler
+  // ----------------------------
+  generateBtn.addEventListener("click", async () => {
+    status.classList.remove("hidden");
+    status.textContent = "Fetching random video...";
+    video.src = "";
+    generateBtn.disabled = true;
 
-    const response = await fetch('https://norch-project.gleeze.com/api/shoti');
-    const data = await response.json();
-    console.log(data);
+    try {
+      // Using AllOrigins CORS proxy to bypass restrictions
+      const apiURL =
+        "https://api.allorigins.win/raw?url=" +
+        encodeURIComponent("https://norch-project.gleeze.com/api/shoti");
 
-    if (data && data.url) {
-      shotiVideo.src = data.url;
-      downloadBtn.href = data.url;
-      videoSection.classList.remove('hidden');
-      setTimeout(() => videoSection.classList.add('opacity-100'), 50);
-      status.textContent = "✅ Success! Enjoy your Shoti.";
-    } else {
-      status.textContent = "⚠️ Failed to fetch video. Try again.";
+      const response = await fetch(apiURL);
+      if (!response.ok) throw new Error("API request failed.");
+
+      const data = await response.json();
+      console.log("API Response:", data);
+
+      if (data.video) {
+        video.src = data.video;
+        video.classList.remove("hidden");
+        status.textContent = "✅ Video loaded successfully!";
+      } else {
+        throw new Error("No video field in response");
+      }
+    } catch (err) {
+      console.error("Error fetching Shoti:", err);
+      status.textContent = "❌ Error fetching video.";
+    } finally {
+      generateBtn.disabled = false;
     }
-  } catch (err) {
-    console.error(err);
-    status.textContent = "❌ Error fetching video.";
-  } finally {
-    spinner.classList.add('hidden');
-    btn.disabled = false;
-  }
-});
-
-copyBtn.addEventListener('click', async () => {
-  const url = shotiVideo.src;
-  if (!url) return;
-  try {
-    await navigator.clipboard.writeText(url);
-    status.textContent = "📋 Link copied to clipboard!";
-  } catch {
-    status.textContent = "⚠️ Failed to copy link.";
-  }
+  });
 });
