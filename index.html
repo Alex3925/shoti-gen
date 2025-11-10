@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shoti Generator — Random TikTok Girl</title>
+    <meta name="description" content="Generate random Shoti videos instantly — powered by TikTok API." />
+    <meta name="theme-color" content="#8B5CF6" />
+
+    <!-- Fonts + Tailwind -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ['Inter','ui-sans-serif','system-ui'] },
+            colors: { brand: { DEFAULT:'#8B5CF6', 600:'#7C3AED' }, accent:'#EC4899' }
+          }
+        },
+        darkMode: 'class'
+      }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+      html,body{height:100%}
+      body{font-family:Inter,ui-sans-serif,system-ui}
+      .gradient-bg{
+        background:radial-gradient(1200px 800px at 10% -20%, rgba(139,92,246,.25), transparent 50%),
+        radial-gradient(1000px 700px at 110% 10%, rgba(236,72,153,.18), transparent 45%),
+        linear-gradient(180deg,#0b1020,#0f172a);
+      }
+      @media (prefers-color-scheme: light){
+        .gradient-bg{background:linear-gradient(180deg,#f8fafc,#eef2f7);}
+      }
+      .glass{
+        background:rgba(255,255,255,.04);
+        border:1px solid rgba(255,255,255,.14);
+        backdrop-filter:saturate(140%) blur(8px);
+      }
+      .light .glass{
+        background:rgba(255,255,255,.75);
+        border-color:rgba(2,6,23,.08);
+      }
+      .focus-ring:focus{outline:none;box-shadow:0 0 0 4px rgba(139,92,246,.35);}
+    </style>
+  </head>
+
+  <body class="min-h-full gradient-bg text-slate-100 light:text-slate-900 transition-colors">
+    <!-- Header -->
+    <header class="sticky top-0 z-20 backdrop-blur supports-[backdrop-filter]:bg-white/5 border-b border-white/10 light:border-slate-200 light:bg-white/70">
+      <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-brand/20 flex items-center justify-center text-brand">
+            <i data-lucide="flame" class="w-5 h-5"></i>
+          </div>
+          <span class="text-lg font-semibold tracking-tight">Shoti Generator</span>
+        </div>
+        <button id="themeToggle" class="px-3 py-2 rounded-xl border border-white/15 light:border-slate-300 focus-ring" aria-label="Toggle theme">
+          <span class="inline dark:hidden">🌙</span>
+          <span class="hidden dark:inline">☀️</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="mx-auto max-w-3xl px-4 py-16 text-center">
+      <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
+        Generate a <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-accent">Random Shoti</span>
+      </h1>
+      <p class="mt-3 text-slate-300 light:text-slate-600">Click the button to fetch a random TikTok girl video.</p>
+
+      <div class="mt-8 glass rounded-3xl p-6">
+        <button id="generateBtn" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-brand to-accent text-slate-900 font-semibold px-6 py-3 hover:opacity-90 transition disabled:opacity-60 disabled:cursor-not-allowed">
+          <i data-lucide="sparkles" class="w-5 h-5"></i>
+          <span>Generate Shoti</span>
+          <span id="btnSpinner" class="hidden animate-spin border-2 border-slate-900/20 border-t-slate-900 rounded-full w-4 h-4"></span>
+        </button>
+
+        <div id="status" class="mt-4 text-sm text-slate-400"></div>
+
+        <div id="videoSection" class="mt-6 hidden opacity-0 transition-opacity duration-300">
+          <video id="shotiVideo" controls playsinline class="w-full rounded-2xl border border-white/15 light:border-slate-300 bg-black"></video>
+
+          <!-- Download Section -->
+          <div class="mt-4 flex justify-center gap-3">
+            <a id="downloadBtn" href="#" download class="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500/90 hover:bg-emerald-500 text-slate-900 font-medium px-4 py-2 disabled:opacity-60 disabled:pointer-events-none">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              <span>Download Shoti</span>
+            </a>
+            <button id="copyBtn" class="px-4 py-2 rounded-xl border border-white/15 light:border-slate-300 hover:bg-white/10 light:hover:bg-slate-50 flex items-center gap-2">
+              <i data-lucide="copy" class="w-4 h-4"></i>
+              <span>Copy Link</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <footer class="mt-10 text-sm opacity-80">
+        Made by <span class="font-semibold text-brand">Alex Jhon Ponce</span>
+      </footer>
+    </main>
+
+    <script type="module" src="./script.js"></script>
+  </body>
+</html>
